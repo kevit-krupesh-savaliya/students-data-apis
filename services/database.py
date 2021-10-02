@@ -246,3 +246,55 @@ def get_students_marks_from_class_id(class_id):
     except Exception as error:
         logger.error(f"F_get_students_from_class_id: {error}")
         return {'success': False}
+
+
+"""Use for Student and Class Api"""
+
+
+def get_student_with_marks_with_class_id(student_id, class_id):
+    """Get student with marks for provided class id"""
+
+    try:
+        query = [
+            {
+                '$match': {
+                    'class_id': class_id,
+                    'student_id': student_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'students',
+                    'localField': 'student_id',
+                    'foreignField': '_id',
+                    'as': 'student'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$student'
+                }
+            }, {
+                '$project': {
+                    'class_id': 1,
+                    'student_id': 1,
+                    'student_name': '$student.name',
+                    'marks': {
+                        '$map': {
+                            'input': '$scores',
+                            'as': 'score',
+                            'in': {
+                                'type': '$$score.type',
+                                'marks': {
+                                    '$toInt': '$$score.score'
+                                }
+                            }
+                        }
+                    },
+                    '_id': 0
+                }
+            }
+        ]
+        student_data = db['grades'].aggregate(query, allowDiskUse=True)
+        return {'success': True, 'student': student_data}
+    except Exception as error:
+        logger.error(f"F_get_students_from_class_id: {error}")
+        return {'success': False}

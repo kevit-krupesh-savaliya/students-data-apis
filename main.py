@@ -3,13 +3,15 @@ from flask import Flask
 from config import APP_PORT
 from api.v1.student.student_api import students_api_v1
 from api.v1.classes.class_api import classes_api_v1
+from api.v1.student_class.student_class_api import students_classes_api_v1
 
 
 def create_students_api_app():
     """Create flask app and register blueprint"""
     app = Flask(__name__)
-    app.register_blueprint(students_api_v1, url_prefix='/students')
-    app.register_blueprint(classes_api_v1, url_prefix='/classes')
+    app.register_blueprint(students_api_v1)
+    app.register_blueprint(classes_api_v1)
+    app.register_blueprint(students_classes_api_v1)
     return app
 
 
