@@ -1,6 +1,5 @@
 """Students API"""
-import json
-from flask import Flask, request, Blueprint, jsonify
+from flask import Flask, Blueprint, jsonify
 from services import database
 
 students_api_v1 = Blueprint('students', __name__)

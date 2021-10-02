@@ -6,6 +6,8 @@ from services.logger import logger
 client = pymongo.MongoClient(DB_URL)
 db = client[DB_NAME]
 
+"""Use for Students APIs"""
+
 
 def get_students():
     """Get students from students collection"""
@@ -127,4 +129,120 @@ def get_student_with_marks(student_id):
         return {'success': True, 'student': student_data}
     except Exception as error:
         logger.error(f"F_get_student_with_marks: {error}")
+        return {'success': False}
+
+
+"""Use for classes APIs"""
+
+
+def get_classes():
+    """Get classes from grades collection"""
+    try:
+        classes = db['grades'].find({}, {'class_id': 1, '_id': 0}).sort(
+            [("_id", pymongo.ASCENDING)])
+        return {'success': True, 'classes': classes}
+    except Exception as error:
+        logger.error(f"F_get_classes: {error}")
+        return {'success': False}
+
+
+def get_students_from_class_id(class_id):
+    """Get all students with requested class id"""
+
+    try:
+        query = [
+            {
+                '$match': {
+                    'class_id': class_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'students',
+                    'localField': 'student_id',
+                    'foreignField': '_id',
+                    'as': 'student'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$student'
+                }
+            }, {
+                '$group': {
+                    '_id': '$class_id',
+                    'students': {
+                        '$push': {
+                            'student_name': '$student.name',
+                            'student_id': '$student_id'
+                        }
+                    }
+                }
+            }, {
+                '$project': {
+                    'class_id': '$_id',
+                    'students': 1,
+                    '_id': 0
+                }
+            }
+        ]
+        students_data = db['grades'].aggregate(query, allowDiskUse=True)
+        return {'success': True, 'students': students_data}
+    except Exception as error:
+        logger.error(f"F_get_students_from_class_id: {error}")
+        return {'success': False}
+
+
+def get_students_marks_from_class_id(class_id):
+    """Get all students marks with requested class id"""
+
+    try:
+        query = [
+            {
+                '$match': {
+                    'class_id': class_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'students',
+                    'localField': 'student_id',
+                    'foreignField': '_id',
+                    'as': 'student'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$student'
+                }
+            }, {
+                '$project': {
+                    'class_id': 1,
+                    'student_id': 1,
+                    'total_marks': {
+                        '$toInt': {
+                            '$sum': '$scores.score'
+                        }
+                    },
+                    'student': 1
+                }
+            }, {
+                '$group': {
+                    '_id': '$class_id',
+                    'students': {
+                        '$push': {
+                            'student_id': '$student_id',
+                            'student_name': '$student.name',
+                            'total_marks': '$total_marks'
+                        }
+                    }
+                }
+            }, {
+                '$project': {
+                    'class_id': '$_id',
+                    'students': 1,
+                    '_id': 0
+                }
+            }
+        ]
+        students_data = db['grades'].aggregate(query, allowDiskUse=True)
+        return {'success': True, 'students': students_data}
+    except Exception as error:
+        logger.error(f"F_get_students_from_class_id: {error}")
         return {'success': False}
