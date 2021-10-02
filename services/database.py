@@ -248,6 +248,77 @@ def get_students_marks_from_class_id(class_id):
         return {'success': False}
 
 
+def get_student_data(class_id):
+    """Get student data with marks"""
+
+    try:
+        query = [
+            {
+                '$match': {
+                    'class_id': class_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'students',
+                    'localField': 'student_id',
+                    'foreignField': '_id',
+                    'as': 'student'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$student'
+                }
+            }, {
+                '$project': {
+                    'class_id': 1,
+                    'student_id': 1,
+                    'student_name': '$student.name',
+                    'total_marks': {
+                        '$toInt': {
+                            '$sum': '$scores.score'
+                        }
+                    },
+                    'details': {
+                        '$map': {
+                            'input': '$scores',
+                            'as': 'score',
+                            'in': {
+                                'type': '$$score.type',
+                                'marks': {
+                                    '$toInt': '$$score.score'
+                                }
+                            }
+                        }
+                    },
+                    '_id': 0
+                }
+            }, {
+                '$group': {
+                    '_id': '$class_id',
+                    'students': {
+                        '$push': {
+                            'student_id': '$student_id',
+                            'student_name': '$student_name',
+                            'details': '$details',
+                            'total_marks': '$total_marks'
+                        }
+                    }
+                }
+            }, {
+                '$project': {
+                    'class_id': '$_id',
+                    'students': 1,
+                    '_id': 0
+                }
+            }
+        ]
+        students_data = db['grades'].aggregate(query, allowDiskUse=True)
+        return {'success': True, 'students': students_data}
+    except Exception as error:
+        logger.error(f"F_get_student_data: {error}")
+        return {'success': False}
+
+
 """Use for Student and Class Api"""
 
 
