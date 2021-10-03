@@ -348,6 +348,11 @@ def get_student_with_marks_with_class_id(student_id, class_id):
                     'class_id': 1,
                     'student_id': 1,
                     'student_name': '$student.name',
+                    'total_marks': {
+                        '$toInt': {
+                            '$sum': '$scores.score'
+                        }
+                    },
                     'marks': {
                         '$map': {
                             'input': '$scores',
