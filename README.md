@@ -51,6 +51,8 @@
         ├── `.pylintrc` pylint configuration file
         
         ├── `requirements.txt` python package file
+        
+        ├── `Student api.postman_collection.json` postman collection
 
     2. **APIs**
 
@@ -87,3 +89,7 @@
     ```
     python main.py
     ```
+
+ ## Test APIs
+
+ * Import postman collection, check root project directory

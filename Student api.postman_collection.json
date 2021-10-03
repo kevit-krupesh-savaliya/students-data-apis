@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "2baf7f59-092f-4908-97a2-ef57153ed677",
+		"name": "Student api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Get Students",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/students",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get student with classes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/student/:student_id/classes",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"student",
+								":student_id",
+								"classes"
+							],
+							"variable": [
+								{
+									"key": "student_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get student with performance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/student/:student_id/performance",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"student",
+								":student_id",
+								"performance"
+							],
+							"variable": [
+								{
+									"key": "student_id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Classes",
+			"item": [
+				{
+					"name": "Get classes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/classes",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"classes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get students info with perticular class",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/class/:class_id/students",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"class",
+								":class_id",
+								"students"
+							],
+							"variable": [
+								{
+									"key": "class_id",
+									"value": "149"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get students marks info with  perticular class",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/class/:class_id/performance",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"class",
+								":class_id",
+								"performance"
+							],
+							"variable": [
+								{
+									"key": "class_id",
+									"value": "331"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Student grade sheet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/class/:class_id/final-grade-sheet",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"class",
+								":class_id",
+								"final-grade-sheet"
+							],
+							"variable": [
+								{
+									"key": "class_id",
+									"value": "113"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Student + Classes",
+			"item": [
+				{
+					"name": "Student and Class data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/class/:class_id/student/:student_id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"class",
+								":class_id",
+								"student",
+								":student_id"
+							],
+							"variable": [
+								{
+									"key": "class_id",
+									"value": "331"
+								},
+								{
+									"key": "student_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
