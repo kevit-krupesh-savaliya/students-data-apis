@@ -21,4 +21,5 @@ def run_students_api_app():
     student_api_app.run(debug=False, threaded=True, port=APP_PORT)
 
 
-run_students_api_app()
+if __name__ == '__main__':
+    run_students_api_app()
